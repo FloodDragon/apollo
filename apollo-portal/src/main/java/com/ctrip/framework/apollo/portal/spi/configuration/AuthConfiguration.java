@@ -1,5 +1,7 @@
 package com.ctrip.framework.apollo.portal.spi.configuration;
 
+import com.ctrip.framework.apollo.portal.spi.springsecurity.CustomDaoAuthenticationProvider;
+import com.ctrip.framework.apollo.portal.spi.springsecurity.CustomJdbcUserDetailsManager;
 import com.google.common.collect.Maps;
 
 import com.ctrip.framework.apollo.common.condition.ConditionalOnMissingProfile;
@@ -18,7 +20,6 @@ import com.ctrip.framework.apollo.portal.spi.defaultimpl.DefaultUserInfoHolder;
 import com.ctrip.framework.apollo.portal.spi.defaultimpl.DefaultUserService;
 import com.ctrip.framework.apollo.portal.spi.springsecurity.SpringSecurityUserInfoHolder;
 import com.ctrip.framework.apollo.portal.spi.springsecurity.SpringSecurityUserService;
-
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -36,7 +37,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
-
 import javax.servlet.Filter;
 import java.util.EventListener;
 import java.util.Map;
@@ -211,11 +211,10 @@ public class AuthConfiguration {
 
     @Bean
     public JdbcUserDetailsManager jdbcUserDetailsManager(AuthenticationManagerBuilder auth, DataSource datasource) throws Exception {
-      JdbcUserDetailsManager jdbcUserDetailsManager = auth.jdbcAuthentication().passwordEncoder(new BCryptPasswordEncoder()).dataSource(datasource)
-          .usersByUsernameQuery("select Username,Password,Enabled from `Users` where Username = ?")
-          .authoritiesByUsernameQuery("select Username,Authority from `Authorities` where Username = ?")
-          .getUserDetailsService();
-
+      JdbcUserDetailsManager jdbcUserDetailsManager = new CustomJdbcUserDetailsManager();
+      jdbcUserDetailsManager.setUsersByUsernameQuery("select Username,Password,Enabled from `Users` where Username = ?");
+      jdbcUserDetailsManager.setAuthoritiesByUsernameQuery("select Username,Authority from `Authorities` where Username = ?");
+      jdbcUserDetailsManager.setDataSource(datasource);
       jdbcUserDetailsManager.setUserExistsSql("select Username from `Users` where Username = ?");
       jdbcUserDetailsManager.setCreateUserSql("insert into `Users` (Username, Password, Enabled) values (?,?,?)");
       jdbcUserDetailsManager.setUpdateUserSql("update `Users` set Password = ?, Enabled = ? where Username = ?");
@@ -223,7 +222,11 @@ public class AuthConfiguration {
       jdbcUserDetailsManager.setCreateAuthoritySql("insert into `Authorities` (Username, Authority) values (?,?)");
       jdbcUserDetailsManager.setDeleteUserAuthoritiesSql("delete from `Authorities` where Username = ?");
       jdbcUserDetailsManager.setChangePasswordSql("update `Users` set Password = ? where Username = ?");
-
+      CustomDaoAuthenticationProvider customDaoAuthenticationProvider = new CustomDaoAuthenticationProvider();
+      customDaoAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
+      customDaoAuthenticationProvider.setUserDetailsService(jdbcUserDetailsManager);
+      customDaoAuthenticationProvider.setUserService(springSecurityUserService());
+      auth.authenticationProvider(customDaoAuthenticationProvider);
       return jdbcUserDetailsManager;
     }
 
@@ -232,7 +235,6 @@ public class AuthConfiguration {
     public UserService springSecurityUserService() {
       return new SpringSecurityUserService();
     }
-
   }
 
   @Order(99)

@@ -1,5 +1,6 @@
 package com.ctrip.framework.apollo.portal.spi.ctrip;
 
+import com.ctrip.framework.apollo.portal.entity.po.UserPO;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -94,6 +95,11 @@ public class CtripUserService implements UserService {
             .collect(Collectors.toList()));
 
     return result;
+  }
+
+  @Override
+  public void createOrUpdate(UserPO user) {
+
   }
 
   private UserInfo transformUserServiceResponseToUserInfo(UserServiceResponse userServiceResponse) {
