@@ -22,9 +22,4 @@ public class DomainAuthUser {
 			throw new RuntimeException(ex);
 		}
 	}
-
-//	public static void main(String[] args) {
-//		System.out.println(domainAuth("liuj-ai", "LiuJing19891112"));
-//		System.out.println(domainAuth("bim", "123"));
-//	}
 }
