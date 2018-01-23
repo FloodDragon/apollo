@@ -7,7 +7,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.authentication.encoding.PlaintextPasswordEncoder;
@@ -55,23 +54,30 @@ public class CustomDaoAuthenticationProvider extends AbstractUserDetailsAuthenti
         Assert.notNull(this.userDetailsService, "A UserDetailsService must be set");
     }
 
-    protected final UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
+    protected final UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException
+    {
         UserDetails loadedUser;
         try {
-
-            String password = authentication.getCredentials().toString();
-            boolean success = DomainAuthUser.domainAuth(username, password);
-            if (success)
+            if ("admin".equals(username) || "apollo".equals(username))
             {
-                UserPO userPO = new UserPO();
-                userPO.setUsername(username);
-                userPO.setPassword(password);
-                userPO.setEmail(username.endsWith("@glodon.com") ? username : username + "@glodon.com");
-                userPO.setEnabled(1);
-                userService.createOrUpdate(userPO);
                 loadedUser = this.getUserDetailsService().loadUserByUsername(username);
-            }else
-                loadedUser = null;
+            }
+            else
+            {
+                String password = authentication.getCredentials().toString();
+                boolean success = DomainAuthUser.domainAuth(username, password);
+                if (success)
+                {
+                    UserPO userPO = new UserPO();
+                    userPO.setUsername(username);
+                    userPO.setPassword(password);
+                    userPO.setEmail(username.endsWith("@glodon.com") ? username : username + "@glodon.com");
+                    userPO.setEnabled(1);
+                    userService.createOrUpdate(userPO);
+                    loadedUser = this.getUserDetailsService().loadUserByUsername(username);
+                }else
+                    loadedUser = null;
+            }
         } catch (UsernameNotFoundException var6) {
             if(authentication.getCredentials() != null) {
                 String presentedPassword = authentication.getCredentials().toString();
