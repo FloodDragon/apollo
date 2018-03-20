@@ -1,6 +1,7 @@
 package com.ctrip.framework.apollo.portal.controller;
 
 
+import com.ctrip.framework.apollo.portal.entity.bo.UserInfo;
 import com.google.common.collect.Sets;
 
 import com.ctrip.framework.apollo.common.entity.App;
@@ -36,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -56,6 +58,38 @@ public class AppController {
   @Autowired
   private RolePermissionService rolePermissionService;
 
+  /**
+   * 管理员是owner的所有app
+   *
+   * @param owner
+   * @return
+   */
+  @RequestMapping(value = "/by-owner", method = RequestMethod.GET)
+  public List<App> findAppsByAdminOwner(@RequestParam("owner") String owner){
+    List<App> appList = appService.findAll();
+    if (appList!=null && appList.size() > 0)
+    {
+      List<App> adminAppByOwner = new ArrayList<>();
+      for (App app : appList)
+      {
+        Set<UserInfo> userInfoSet = rolePermissionService.queryUsersWithRole(RoleUtils.buildAppMasterRoleName(app.getAppId()));
+        if (userInfoSet!=null && userInfoSet.size() > 0)
+        {
+          userInfoSet.forEach(userInfo ->
+          {
+            if (owner.equals(userInfo.getUserId()))
+            {
+              adminAppByOwner.add(app);
+            }
+          });
+        }
+      }
+      return adminAppByOwner;
+    }else
+      return null;
+  }
+
+
   @RequestMapping(value = "", method = RequestMethod.GET)
   public List<App> findApps(@RequestParam(value = "appIds", required = false) String appIds) {
     if (StringUtils.isEmpty(appIds)) {
@@ -66,10 +100,10 @@ public class AppController {
 
   }
 
-  @RequestMapping(value = "/by-owner", method = RequestMethod.GET)
-  public List<App> findAppsByOwner(@RequestParam("owner") String owner, Pageable page) {
-    return appService.findByOwnerName(owner, page);
-  }
+//  @RequestMapping(value = "/by-owner", method = RequestMethod.GET)
+//  public List<App> findAppsByOwner(@RequestParam("owner") String owner, Pageable page) {
+//    return appService.findByOwnerName(owner, page);
+//  }
 
   @RequestMapping(value = "", method = RequestMethod.POST)
   public App create(@RequestBody AppModel appModel) {
