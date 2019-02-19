@@ -3,12 +3,16 @@ spring:
     name: apollo-adminservice
   profiles:
     active: ${apollo_profile}
+    datasource:
+      url: jdbc:mysql://ghb2c-in-pd-business.mysql.rds.aliyuncs.com:3306/ApolloConfigDB?useSSL=false&characterEncoding=utf8
+      username: bim5d_cm_admin
+      password: AL6%Y4mofBXR&W!
 
 ctrip:
   appid: 100003172
   
 server:
-  port: 8002
+  port: 8092
   
 logging:
   file: /opt/logs/100003172/apollo-adminservice.log
