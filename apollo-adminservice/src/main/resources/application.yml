@@ -2,7 +2,7 @@ spring:
   application:
     name: apollo-adminservice
   profiles:
-    active: ${apollo_profile}
+    active: github
   datasource:
       url: jdbc:mysql://ghb2c-in-pd-business.mysql.rds.aliyuncs.com:3306/ApolloConfigDB?useSSL=false&characterEncoding=utf8
       username: bim5d_cm_admin
