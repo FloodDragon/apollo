@@ -2,7 +2,7 @@ spring:
   application:
     name: apollo-portal
   profiles:
-    active: github
+    active: github,auth
   datasource:
     url: jdbc:mysql://ghb2c-in-pd-business.mysql.rds.aliyuncs.com:3306/ApolloPortalDB?useSSL=false&characterEncoding=utf8
     username: bim5d_cm_admin
