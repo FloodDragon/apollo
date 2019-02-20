@@ -2,10 +2,10 @@ spring:
   application:
     name: apollo-portal
   profiles:
-    active: ${apollo_profile}
+    active: auth
 
 server:
-  port: 8080
+  port: 8005
   
 logging:
   file: /opt/logs/100003173/apollo-portal.log
