@@ -4,15 +4,15 @@ spring:
   profiles:
     active: auth
   datasource:
-    url: jdbc:mysql://ghb2c-in-pd-business.mysql.rds.aliyuncs.com:3306/ApolloPortalDB?useSSL=false&characterEncoding=utf8
-    username: bim5d_cm_admin
-    password: AL6%Y4mofBXR&W!
+    url: jdbc:mysql://ghb2ce-in-pd-data.mysql.rds.aliyuncs.com:3306/apolloconfigdb_pro?useSSL=false&characterEncoding=utf8
+    username: bim5d_data_user
+    password: A#Ff!o9QMWUT
 
 server:
-  port: 8093
+  port: 8095
   
 logging:
-  file: /opt/logs/100003173/apollo-portal.log
+  file: /opt/logs/100003175/apollo-portal.log
 
 endpoints:
   health:
