@@ -4,15 +4,15 @@ spring:
   profiles:
     active: github
   datasource:
-      url: jdbc:mysql://ghb2ce-in-pd-data.mysql.rds.aliyuncs.com:3306/apolloconfigdb_pro?useSSL=false&characterEncoding=utf8
+      url: jdbc:mysql://ghb2f-in-te-data.mysql.rds.aliyuncs.com:3306/apolloconfigdb_uat?useSSL=false&characterEncoding=utf8
       username: bim5d_data_user
-      password: A#Ff!o9QMWUT
+      password: kmJv@ULw#MKKQ
 
 ctrip:
-  appid: 100003172
+  appid: 100003174
   
 server:
-  port: 8092
+  port: 8094
   
 logging:
-  file: /opt/logs/100003172/apollo-adminservice.log
+  file: /opt/logs/100003174/apollo-adminservice.log

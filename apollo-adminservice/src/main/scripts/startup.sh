@@ -1,9 +1,9 @@
 #!/bin/bash
 SERVICE_NAME=apollo-adminservice
 ## Adjust log dir if necessary
-LOG_DIR=/opt/logs/100003172
+LOG_DIR=/opt/logs/100003174
 ## Adjust server port if necessary
-SERVER_PORT=8092
+SERVER_PORT=8094
 
 ## Adjust memory settings if necessary
 #export JAVA_OPTS="-Xms2560m -Xmx2560m -Xss256k -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=384m -XX:NewSize=1536m -XX:MaxNewSize=1536m -XX:SurvivorRatio=8"

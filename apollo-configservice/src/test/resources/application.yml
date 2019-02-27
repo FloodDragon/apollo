@@ -11,4 +11,4 @@ logging:
   file: /opt/logs/${ctrip.appid}/apollo-configservice.log
 
 ctrip:
-  appid: 100003171
+  appid: 100003173
