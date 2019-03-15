@@ -4,9 +4,9 @@ spring:
 #  profiles:
 #    active: github
   datasource:
-    url: jdbc:mysql://ghb2f-in-te-data.mysql.rds.aliyuncs.com:3306/apolloconfigdb_uat?useSSL=false&characterEncoding=utf8
-    username: bim5d_data_user
-    password: kmJv@ULw#MKKQ
+    url: jdbc:mysql://ohb2e-in-te-bim5d_platform.mysql.rds.aliyuncs.com:3306/apollo_config_db_uat?useSSL=false&characterEncoding=utf8
+    username: bp_user
+    password: TJIzDnPLf07rn#
 
 ctrip:
   appid: 100003173
